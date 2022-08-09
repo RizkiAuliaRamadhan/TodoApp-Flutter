@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/model/todo.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -23,7 +24,8 @@ class _HomePageState extends State<HomePage> {
         myAppBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
     double widthBody = MediaQuery.of(context).size.width;
-
+    // var coba = Hive.box("todos");
+  //  print(coba.get('title'));
     // function search
     void searchTodo(String query) {
       final todoFilter = dataTodo.where((todo) {
@@ -72,9 +74,18 @@ class _HomePageState extends State<HomePage> {
                             return CheckboxListTile(
                                 secondary: IconButton(
                                   onPressed: () {
-                                    setState(() {
-                                      todos.removeAt(index);
-                                    });
+                                    CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.confirm,
+                                      text: "sure the data will be deleted ?",
+                                      onConfirmBtnTap: () {
+                                        setState(() {
+                                          todos.removeAt(index);
+                                        });
+                                        Navigator.pop(context);
+                                        CoolAlert.show(context: context, type: CoolAlertType.success);
+                                      },
+                                    );
                                   },
                                   icon: Icon(Icons.delete),
                                   color: Colors.red,
